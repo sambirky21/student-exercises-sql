@@ -99,3 +99,13 @@ INSERT INTO  Assignment (ExerciseId, StudentId) VALUES (8,1);
 INSERT INTO  Assignment (ExerciseId, StudentId) VALUES (8,4);
 INSERT INTO  Assignment (ExerciseId, StudentId) VALUES (9,3);
 INSERT INTO  Assignment (ExerciseId, StudentId) VALUES (9,5);
+
+select
+	e.Id ExerciseId,
+	e.Name,
+	s.Id,
+	s.First,
+	s.Last
+from Exercise e
+join Assignment se on se.ExerciseId = e.Id
+join Student s on s.Id = se.StudentId
