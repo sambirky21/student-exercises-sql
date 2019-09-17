@@ -331,3 +331,58 @@ class TeacherReports():
 
 reports27 = TeacherReports()
 reports27.all_teachers()
+
+# class Assignment():
+
+#     def __init__(self, first, last, name):
+#         self.first = first
+#         self.last = last
+#         self.name = name
+
+#     def __repr__(self):
+#         return f'{self.first} {self.last} {self.name}.'
+
+class ExerciseAssignment():
+
+    def __init__(self):
+        self.db_path = "/Users/sbirky21/workspace/python/StudentExercises/studentexercises.db"
+
+
+    def exercises(self):
+        exercises = dict()
+        with sqlite3.connect(self.db_path) as conn:
+            db_cursor = conn.cursor()
+
+            db_cursor.execute("""
+                select
+                    e.Id ExerciseId,
+                    e.Name,
+                    s.Id,
+                    s.First,
+                    s.Last
+                from Exercise e
+                join Assignment se on se.ExerciseId = e.Id
+                join Student s on s.Id = se.StudentId
+            """)
+
+            dataset = db_cursor.fetchall()
+
+            for row in dataset:
+                exercise_id = row[0]
+                exercise_name = row[1]
+                student_id = row[2]
+                student_name = f'{row[3]} {row[4]}'
+
+                if exercise_name not in exercises:
+                    exercises[exercise_name] = [student_name]
+                else:
+                    exercises[exercise_name].append(student_name)
+
+            for exercise_name, students in exercises.items():
+                print(exercise_name)
+                for student in students:
+                    print(f'\t* {student}')
+            print(exercises)
+
+assignents = ExerciseAssignment()
+assignents.exercises()
